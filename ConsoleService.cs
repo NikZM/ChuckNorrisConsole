@@ -8,6 +8,7 @@ public class ConsoleService : IHostedService
     private readonly IController controller;
     private IConfiguration configuration;
     private CancellationTokenSource? cancellationTokenSource;
+    private int intialTopCursor;
 
     public ConsoleService(IController controller, IConfiguration configuration)
     {
@@ -17,14 +18,14 @@ public class ConsoleService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        cancellationTokenSource = new CancellationTokenSource();
+        this.cancellationTokenSource = new CancellationTokenSource();
         return Task.Factory.StartNew(async () =>
         {
             if (configuration.GetValue<bool>("displaySplash"))
             {
                 DisplaySplash();
             }
-            int initialTop = Console.CursorTop;
+            this.intialTopCursor = Console.CursorTop;
             while (!cancellationTokenSource!.IsCancellationRequested)
             {
                 try
@@ -32,25 +33,19 @@ public class ConsoleService : IHostedService
                     switch (Console.ReadKey().KeyChar)
                     {
                         case 'j':
-                            Console.SetCursorPosition(0, initialTop);
-                            Console.Write(new string(' ', Console.WindowWidth) + "\r");
-                            var l = await controller.GetNewJokeAsync();
-                            Console.Write(l?.Value);
+                            JokeResponse newJoke = await controller.GetNewJokeAsync();
+                            UpdateConsoleLine(newJoke.Value);
                             break;
                         case 'n':
                             if (controller.HasNextJoke)
                             {
-                                Console.SetCursorPosition(0, initialTop);
-                                Console.Write(new string(' ', Console.WindowWidth) + "\r");
-                                Console.Write(controller.GetNextJoke().Value);
+                                UpdateConsoleLine(controller.GetNextJoke().Value);
                             }
                             break;
                         case 'p':
                             if (controller.HasPreviousJoke)
                             {
-                                Console.SetCursorPosition(0, initialTop);
-                                Console.Write(new string(' ', Console.WindowWidth) + "\r");
-                                Console.Write(controller.GetPreviousJoke().Value);
+                                UpdateConsoleLine(controller.GetPreviousJoke().Value);
                             }
                             break;
 
@@ -58,9 +53,7 @@ public class ConsoleService : IHostedService
                 }
                 catch (ChuckNorrisException exception)
                 {
-                    Console.SetCursorPosition(0, initialTop);
-                    Console.Write(new string(' ', Console.WindowWidth) + "\r");
-                    Console.Write(exception.Message);
+                    UpdateConsoleLine(exception.Message);
                 }
             }
         });
@@ -68,7 +61,7 @@ public class ConsoleService : IHostedService
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
-        cancellationTokenSource?.Cancel();
+        this.cancellationTokenSource?.Cancel();
         return Task.CompletedTask;
     }
 
@@ -77,5 +70,23 @@ public class ConsoleService : IHostedService
         Console.Clear();
         string text = System.IO.File.ReadAllText("./splash.txt");
         Console.WriteLine(text);
+    }
+
+    void UpdateConsoleLine(string message)
+    {
+        int currentTop = Console.CursorTop;
+
+        // Multi-line jokes leaves ghosts of long jokes on following lines
+        if (currentTop > this.intialTopCursor)
+        {
+            foreach (int cursorTop in Enumerable.Range(this.intialTopCursor, currentTop))
+            {
+                Console.SetCursorPosition(0, cursorTop);
+                Console.Write(new string(' ', Console.WindowWidth) + "\r");
+            }
+        }
+        Console.SetCursorPosition(0, this.intialTopCursor);
+        Console.Write(new string(' ', Console.WindowWidth) + "\r");
+        Console.Write(message);
     }
 }
