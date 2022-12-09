@@ -26,19 +26,19 @@ public class InMemoryHistory<T> : IHistoryService<T>
 
     public T? Next()
     {
-        if (!HasNext)
+        if (storage.Count == 0)
         {
             return default(T);
         }
-        return storage[++index];
+        return storage[this.HasNext ? ++index : storage.Count - 1];
     }
 
     public T? Previous()
     {
-        if (!HasPrevious)
+        if (storage.Count == 0)
         {
             return default(T);
         }
-        return storage[--index];
+        return storage[this.HasPrevious ? --index : 0];
     }
 }

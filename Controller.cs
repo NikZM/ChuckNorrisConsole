@@ -23,23 +23,13 @@ public class Controller : IController
         return joke!;
     }
 
-    public JokeResponse GetPreviousJoke()
+    public JokeResponse? GetPreviousJoke()
     {
-        JokeResponse? joke = this.historyProvider.Previous();
-        if (string.IsNullOrEmpty(joke?.Value))
-        {
-            throw new ChuckNorrisException("When Chuck Norris throws exceptions, it's across the room.");
-        }
-        return joke!;
+        return this.historyProvider.Previous();
     }
 
-    public JokeResponse GetNextJoke()
+    public JokeResponse? GetNextJoke()
     {
-        JokeResponse? joke = this.historyProvider.Next();
-        if (string.IsNullOrEmpty(joke?.Value))
-        {
-            throw new ChuckNorrisException("When Chuck Norris throws exceptions, it's across the room.");
-        }
-        return joke!;
+        return this.historyProvider.Next();
     }
 }

@@ -37,18 +37,14 @@ public class ConsoleService : IHostedService
                             UpdateConsoleLine(newJoke.Value);
                             break;
                         case 'n':
-                            if (controller.HasNextJoke)
-                            {
-                                UpdateConsoleLine(controller.GetNextJoke().Value);
-                            }
+                            UpdateConsoleLine(controller.GetNextJoke()?.Value ?? string.Empty);
                             break;
                         case 'p':
-                            if (controller.HasPreviousJoke)
-                            {
-                                UpdateConsoleLine(controller.GetPreviousJoke().Value);
-                            }
+                            UpdateConsoleLine(controller.GetPreviousJoke()?.Value ?? string.Empty);
                             break;
-
+                        default:
+                            UpdateConsoleLine(string.Empty);
+                            break;
                     }
                 }
                 catch (ChuckNorrisException exception)
