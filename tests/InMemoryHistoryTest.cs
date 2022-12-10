@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+
 namespace GetBusy.ChuckNorrisApi.Tests;
 
 public class InMemoryHistoryTest
@@ -5,21 +7,35 @@ public class InMemoryHistoryTest
     [Fact]
     public void HasNext_WhenInitialized_ReturnsFalse()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        // Moq is unable to stub extension methods however looking at the source code
+        // on github shows it leverages GetSection which is declared in the standard interface
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         Assert.False(inMemoryHistory.HasNext);
     }
 
     [Fact]
     public void HasPrevious_WhenInitialized_ReturnsFalse()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         Assert.False(inMemoryHistory.HasPrevious);
     }
 
     [Fact]
     public void HasPrevious_WhenAppendedOnce_ReturnsFalse()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         Assert.False(inMemoryHistory.HasPrevious);
     }
@@ -27,7 +43,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void HasNext_WhenAppendedOnce_ReturnsFalse()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         Assert.False(inMemoryHistory.HasNext);
     }
@@ -35,7 +55,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void HasPrevious_WhenAppendedTwice_ReturnsTrue()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         Assert.True(inMemoryHistory.HasPrevious);
@@ -44,7 +68,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void HasNext_WhenAppended_ReturnsFalse()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         Assert.False(inMemoryHistory.HasNext);
     }
@@ -52,7 +80,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void HasNext_WhenAppendedAndPrevious_ReturnsTrue()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         inMemoryHistory.Previous();
@@ -62,7 +94,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void Next_WhenAppendedTwice_ReturnsLastResult()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         string? result = inMemoryHistory.Next();
@@ -72,7 +108,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void Previous_WhenAppendedTwice_ReturnsFirstResult()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         string? result = inMemoryHistory.Previous();
@@ -82,7 +122,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void Append_WhenAppended_MovesCursorToEnd()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>();
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns(string.Empty);
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         inMemoryHistory.Append("test3");
@@ -97,7 +141,11 @@ public class InMemoryHistoryTest
     [Fact]
     public void Append_WhenAppendedThreeTimeWithMaxBufferOfTwo_DropsFirstResult()
     {
-        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(2);
+        var configuration = new Mock<IConfiguration>();
+        var section = new Mock<IConfigurationSection>();
+        section.SetupGet(x => x.Value).Returns("2");
+        configuration.Setup(x => x.GetSection("maxHistory")).Returns(section.Object);
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(configuration.Object);
         inMemoryHistory.Append("test");
         inMemoryHistory.Append("test2");
         inMemoryHistory.Append("test3");

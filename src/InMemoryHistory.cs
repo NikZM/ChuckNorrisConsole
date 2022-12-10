@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+
 namespace GetBusy.ChuckNorrisApi;
 
 public class InMemoryHistory<T> : IHistoryService<T>
@@ -8,10 +10,9 @@ public class InMemoryHistory<T> : IHistoryService<T>
     public bool HasNext => index < storage.Count - 1;
     public bool HasPrevious => index > 0;
 
-    public InMemoryHistory() { }
-    public InMemoryHistory(int maxBuffer)
+    public InMemoryHistory(IConfiguration configuration)
     {
-        this.maxBuffer = maxBuffer;
+        this.maxBuffer = configuration.GetValue<int?>("maxHistory");
     }
 
     public void Append(T data)
