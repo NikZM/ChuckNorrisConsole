@@ -12,7 +12,7 @@ The splash screen can be disabled in appsettings.json configuration
 
 `dotnet run`
 
-* Exit the application using ctrl+c
+\* Exit the application using ctrl+c
 
 # Run Unit Tests
 `dotnet test`
