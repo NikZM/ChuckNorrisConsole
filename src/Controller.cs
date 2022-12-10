@@ -14,7 +14,7 @@ public class Controller : IController
 
     public async Task<JokeResponse> GetNewJokeAsync()
     {
-        JokeResponse? joke = await this.dataProvider.get();
+        JokeResponse? joke = await this.dataProvider.Get();
         if (string.IsNullOrEmpty(joke?.Value))
         {
             throw new ChuckNorrisException("When Chuck Norris throws exceptions, it's across the room.");

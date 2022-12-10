@@ -64,7 +64,7 @@ public class ConsoleService : IHostedService
     void DisplaySplash()
     {
         Console.Clear();
-        string text = System.IO.File.ReadAllText("./splash.txt");
+        string text = System.IO.File.ReadAllText("./assets/splash.txt");
         Console.WriteLine(text);
     }
 

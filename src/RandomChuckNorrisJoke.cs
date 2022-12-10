@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace GetBusy.ChuckNorrisApi;
 
-class RandomChuckNorrisJoke : IDataProvider<JokeResponse>
+public class RandomChuckNorrisJoke : IDataProvider<JokeResponse>
 {
     private readonly IHttpClientFactory httpClientFactory;
     private readonly IConfiguration configuration;
@@ -16,12 +16,12 @@ class RandomChuckNorrisJoke : IDataProvider<JokeResponse>
         this.serializerOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
     }
 
-    public async Task<JokeResponse?> get()
+    public async Task<JokeResponse?> Get()
     {
         try
         {
             using HttpClient client = httpClientFactory.CreateClient();
-            await using Stream stream = await client.GetStreamAsync(configuration.GetValue<string>("url"));
+            await using Stream stream = await client.GetStreamAsync(configuration["url"]);
             return await JsonSerializer.DeserializeAsync<JokeResponse>(stream, serializerOptions);
         }
         catch (Exception err)

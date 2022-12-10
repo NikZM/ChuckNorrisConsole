@@ -1,3 +1,5 @@
+namespace GetBusy.ChuckNorrisApi;
+
 [Serializable]
 public class ChuckNorrisException : Exception
 {
