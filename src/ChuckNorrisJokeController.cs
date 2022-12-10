@@ -1,12 +1,12 @@
 namespace GetBusy.ChuckNorrisApi;
 
-public class Controller : IController
+public class ChuckNorrisJokeController : IJokeController
 {
     private readonly IDataProvider<JokeResponse> dataProvider;
     private readonly IHistoryService<JokeResponse> historyProvider;
     public bool HasPreviousJoke => this.historyProvider.HasPrevious;
     public bool HasNextJoke => this.historyProvider.HasNext;
-    public Controller(IDataProvider<JokeResponse> dataProvider, IHistoryService<JokeResponse> historyProvider)
+    public ChuckNorrisJokeController(IDataProvider<JokeResponse> dataProvider, IHistoryService<JokeResponse> historyProvider)
     {
         this.dataProvider = dataProvider;
         this.historyProvider = historyProvider;

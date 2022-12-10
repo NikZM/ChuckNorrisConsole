@@ -18,4 +18,4 @@
   ,,.  ,,   ,, ..@,  ,@..,,,   ,,   ,, . 
   ,,.  ,,   @@&#%@#  #@##&@@   ,,   ,, .  Enter j for new jokes
   ,,.  ,,   ,,  .,,  ,,,  ,,   ,,   ,, .
-  ,,.  ,,   ,,  .,,  ,,,  ,,   ,,   ,, .  Cycle through your history with n/p
+  ,,.  ,,   ,,  .,,  ,,,  ,,   ,,   ,, .  Cycle through your history with p/n

@@ -1,6 +1,6 @@
 namespace GetBusy.ChuckNorrisApi;
 
-public interface IController
+public interface IJokeController
 {
     public bool HasPreviousJoke { get; }
     public bool HasNextJoke { get; }

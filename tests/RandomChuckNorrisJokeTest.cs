@@ -6,7 +6,6 @@ namespace GetBusy.ChuckNorrisApi.Tests;
 
 public class RandomChuckNorrisJokeTest
 {
-
     [Fact]
     public async void Get_CallsSendAsync_WhenCalled()
     {

@@ -1,8 +1,7 @@
 namespace GetBusy.ChuckNorrisApi.Tests;
 
-public class ControllerTest
+public class JokeControllerTest
 {
-
     [Fact]
     public async void GetNewJokeAsync_AppendsJokeToHistory_WhenCalledWithResult()
     {
@@ -11,7 +10,7 @@ public class ControllerTest
         dateProvider.Setup(x => x.Get()).ReturnsAsync(new JokeResponse() { Value = "Chuck Norris can unit test entire applications with a single assert." });
         historyProvider.Setup(x => x.Previous()).Returns(default(JokeResponse));
         historyProvider.Setup(x => x.Next()).Returns(default(JokeResponse));
-        IController controller = new Controller(dateProvider.Object, historyProvider.Object);
+        IJokeController controller = new ChuckNorrisJokeController(dateProvider.Object, historyProvider.Object);
 
         await controller.GetNewJokeAsync();
         historyProvider.Verify(x => x.Append(It.IsAny<JokeResponse>()));
@@ -25,7 +24,7 @@ public class ControllerTest
         dateProvider.Setup(x => x.Get()).ReturnsAsync(new JokeResponse() { });
         historyProvider.Setup(x => x.Previous()).Returns(default(JokeResponse));
         historyProvider.Setup(x => x.Next()).Returns(default(JokeResponse));
-        IController controller = new Controller(dateProvider.Object, historyProvider.Object);
+        IJokeController controller = new ChuckNorrisJokeController(dateProvider.Object, historyProvider.Object);
 
         await Assert.ThrowsAsync<ChuckNorrisException>(() => controller.GetNewJokeAsync());
         historyProvider.Verify(x => x.Append(It.IsAny<JokeResponse>()), Times.Never());
@@ -38,7 +37,7 @@ public class ControllerTest
         var historyProvider = new Mock<IHistoryService<JokeResponse>>();
         historyProvider.Setup(x => x.Previous()).Returns(default(JokeResponse));
         historyProvider.Setup(x => x.Next()).Returns(default(JokeResponse));
-        IController controller = new Controller(dateProvider.Object, historyProvider.Object);
+        IJokeController controller = new ChuckNorrisJokeController(dateProvider.Object, historyProvider.Object);
 
         Assert.Equal(default(JokeResponse), controller.GetPreviousJoke());
         historyProvider.Verify(x => x.Previous());
@@ -51,7 +50,7 @@ public class ControllerTest
         var historyProvider = new Mock<IHistoryService<JokeResponse>>();
         historyProvider.Setup(x => x.Previous()).Returns(default(JokeResponse));
         historyProvider.Setup(x => x.Next()).Returns(default(JokeResponse));
-        IController controller = new Controller(dateProvider.Object, historyProvider.Object);
+        IJokeController controller = new ChuckNorrisJokeController(dateProvider.Object, historyProvider.Object);
 
         Assert.Equal(default(JokeResponse), controller.GetNextJoke());
         historyProvider.Verify(x => x.Next());

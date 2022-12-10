@@ -5,12 +5,12 @@ namespace GetBusy.ChuckNorrisApi;
 
 public class ConsoleService : IHostedService
 {
-    private readonly IController controller;
+    private readonly IJokeController controller;
     private IConfiguration configuration;
     private CancellationTokenSource? cancellationTokenSource;
     private int intialTopCursor;
 
-    public ConsoleService(IController controller, IConfiguration configuration)
+    public ConsoleService(IJokeController controller, IConfiguration configuration)
     {
         this.controller = controller;
         this.configuration = configuration;
@@ -26,7 +26,7 @@ public class ConsoleService : IHostedService
                 DisplaySplash();
             }
             this.intialTopCursor = Console.CursorTop;
-            while (!cancellationTokenSource!.IsCancellationRequested)
+            while (!this.cancellationTokenSource!.IsCancellationRequested)
             {
                 try
                 {

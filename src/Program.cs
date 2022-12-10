@@ -7,8 +7,8 @@ using IHost host = Host.CreateDefaultBuilder(args)
       services.AddHttpClient()
         .AddSingleton<IHistoryService<JokeResponse>, InMemoryHistory<JokeResponse>>()
         .AddSingleton<IDataProvider<JokeResponse>, RandomChuckNorrisJoke>()
-        .AddSingleton<IController, Controller>()
+        .AddSingleton<IJokeController, ChuckNorrisJokeController>()
         .AddHostedService<ConsoleService>()
   ).Build();
 
-  host.Run();
+host.Run();
