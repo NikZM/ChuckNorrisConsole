@@ -94,4 +94,18 @@ public class InMemoryHistoryTest
         Assert.Equal("test3", result);
     }
 
+    [Fact]
+    public void Append_WhenAppendedThreeTimeWithMaxBufferOfTwo_DropsFirstResult()
+    {
+        IHistoryService<string> inMemoryHistory = new InMemoryHistory<string>(2);
+        inMemoryHistory.Append("test");
+        inMemoryHistory.Append("test2");
+        inMemoryHistory.Append("test3");
+        inMemoryHistory.Previous();
+        inMemoryHistory.Previous();
+        Assert.False(inMemoryHistory.HasPrevious);
+        string? result = inMemoryHistory.Previous();
+        Assert.Equal("test2", result);
+    }
+
 }
